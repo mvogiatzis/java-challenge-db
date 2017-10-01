@@ -3,7 +3,7 @@ package com.db.awmd.challenge.service;
 import com.db.awmd.challenge.domain.Account;
 import com.db.awmd.challenge.domain.Transfer;
 import com.db.awmd.challenge.exception.AccountNotFoundException;
-import com.db.awmd.challenge.exception.NegativeBalanceException;
+import com.db.awmd.challenge.exception.NotEnoughFundsException;
 import com.db.awmd.challenge.exception.TransferBetweenSameAccountException;
 import org.springframework.stereotype.Component;
 
@@ -20,11 +20,11 @@ public class TransferValidatorImpl implements TransferValidator {
      * @param currAccountTo The existing destination account as found in the repository
      * @param transfer The transfer object as requested
      * @throws AccountNotFoundException
-     * @throws NegativeBalanceException
+     * @throws NotEnoughFundsException
      * @throws TransferBetweenSameAccountException
      */
     public void validate(final Account currAccountFrom, final Account currAccountTo, final Transfer transfer)
-            throws AccountNotFoundException, NegativeBalanceException, TransferBetweenSameAccountException{
+            throws AccountNotFoundException, NotEnoughFundsException, TransferBetweenSameAccountException{
 
         if (currAccountFrom == null){
             throw new AccountNotFoundException("Account " + transfer.getAccountFromId() + " not found.");
@@ -39,7 +39,7 @@ public class TransferValidatorImpl implements TransferValidator {
         }
 
         if (!enoughFunds(currAccountFrom, transfer.getAmount())){
-            throw new NegativeBalanceException("Not enough funds on account " + currAccountFrom.getAccountId() + " balance="+currAccountFrom.getBalance());
+            throw new NotEnoughFundsException("Not enough funds on account " + currAccountFrom.getAccountId() + " balance="+currAccountFrom.getBalance());
         }
     }
 

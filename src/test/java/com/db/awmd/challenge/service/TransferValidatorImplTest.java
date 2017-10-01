@@ -3,7 +3,7 @@ package com.db.awmd.challenge.service;
 import com.db.awmd.challenge.domain.Account;
 import com.db.awmd.challenge.domain.Transfer;
 import com.db.awmd.challenge.exception.AccountNotFoundException;
-import com.db.awmd.challenge.exception.NegativeBalanceException;
+import com.db.awmd.challenge.exception.NotEnoughFundsException;
 import com.db.awmd.challenge.exception.TransferBetweenSameAccountException;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,7 +58,7 @@ public class TransferValidatorImplTest {
         try {
             transferValidator.validate(accountFrom, accountTo, transfer);
             fail("Not enough funds");
-        } catch (NegativeBalanceException nbe) {
+        } catch (NotEnoughFundsException nbe) {
             assertThat(nbe.getMessage()).isEqualTo("Not enough funds on account Id-1 balance=0");
         }
     }

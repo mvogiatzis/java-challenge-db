@@ -9,7 +9,7 @@ import com.db.awmd.challenge.domain.Account;
 import com.db.awmd.challenge.domain.Transfer;
 import com.db.awmd.challenge.exception.AccountNotFoundException;
 import com.db.awmd.challenge.exception.DuplicateAccountIdException;
-import com.db.awmd.challenge.exception.NegativeBalanceException;
+import com.db.awmd.challenge.exception.NotEnoughFundsException;
 import com.db.awmd.challenge.service.AccountsService;
 
 import java.math.BigDecimal;
@@ -60,7 +60,7 @@ public class AccountsServiceTest {
     }
 
     @Test
-    public void makeTransfer_Should_FailWhenAccountDoesNotExist() {
+    public void makeTransfer_should_fail_when_accountDoesNotExist() {
         final String accountFromId = UUID.randomUUID().toString();
         final String accountToId = UUID.randomUUID().toString();
         this.accountsService.createAccount(new Account(accountFromId));
@@ -75,7 +75,7 @@ public class AccountsServiceTest {
     }
 
     @Test
-    public void makeTransfer_Should_FailWhenAccountFromNegativeBalance() {
+    public void makeTransfer_should_fail_when_accountNotEnoughFunds() {
         final String accountFromId = UUID.randomUUID().toString();
         final String accountToId = UUID.randomUUID().toString();
         this.accountsService.createAccount(new Account(accountFromId));
@@ -84,14 +84,14 @@ public class AccountsServiceTest {
         try {
             this.accountsService.makeTransfer(transfer);
             fail("Should have failed because account does not have enough funds for the transfer");
-        } catch (NegativeBalanceException nbe) {
+        } catch (NotEnoughFundsException nbe) {
             assertThat(nbe.getMessage()).isEqualTo("Not enough funds on account " + accountFromId + " balance=0");
         }
         verifyZeroInteractions(notificationService);
     }
 
     @Test
-    public void makeTransfer_Should_TransferFunds() {
+    public void makeTransfer_should_transferFunds() {
         final String accountFromId = UUID.randomUUID().toString();
         final String accountToId = UUID.randomUUID().toString();
         final Account accountFrom = new Account(accountFromId, new BigDecimal("500.99"));
@@ -111,7 +111,7 @@ public class AccountsServiceTest {
     }
 
     @Test
-    public void makeTransfer_Should_TransferFundsWhenBalanceJustEnough() {
+    public void makeTransfer_should_transferFunds_when_balanceJustEnough() {
 
         final String accountFromId = UUID.randomUUID().toString();
         final String accountToId = UUID.randomUUID().toString();

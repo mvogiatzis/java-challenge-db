@@ -4,7 +4,7 @@ import com.db.awmd.challenge.domain.Account;
 import com.db.awmd.challenge.domain.AccountUpdate;
 import com.db.awmd.challenge.domain.Transfer;
 import com.db.awmd.challenge.exception.AccountNotFoundException;
-import com.db.awmd.challenge.exception.NegativeBalanceException;
+import com.db.awmd.challenge.exception.NotEnoughFundsException;
 import com.db.awmd.challenge.exception.TransferBetweenSameAccountException;
 import com.db.awmd.challenge.repository.AccountsRepository;
 import lombok.Getter;
@@ -44,10 +44,10 @@ public class AccountsService {
      * Makes a transfer between two accounts for the balance specified by the {@link Transfer} object
      * @param transfer
      * @throws AccountNotFoundException When an account does not exist
-     * @throws NegativeBalanceException When there are not enough funds to complete the transfer
+     * @throws NotEnoughFundsException When there are not enough funds to complete the transfer
      * @throws TransferBetweenSameAccountException Transfer to self account is not permitted
      */
-    public void makeTransfer(Transfer transfer) throws AccountNotFoundException, NegativeBalanceException, TransferBetweenSameAccountException {
+    public void makeTransfer(Transfer transfer) throws AccountNotFoundException, NotEnoughFundsException, TransferBetweenSameAccountException {
 
         final Account accountFrom = accountsRepository.getAccount(transfer.getAccountFromId());
         final Account accountTo = accountsRepository.getAccount(transfer.getAccountToId());

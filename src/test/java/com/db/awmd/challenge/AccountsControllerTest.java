@@ -144,7 +144,7 @@ public class AccountsControllerTest {
     createAccountWithContent("{\"accountId\":\"Id-2\",\"balance\":1000}").andExpect(status().isCreated());
 
     makeTransferWithContent("{\"accountFromId\":\"Id-1\",\"accountToId\":\"Id-2\",\"amount\":21}")
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isUnprocessableEntity());
   }
 
   @Test
